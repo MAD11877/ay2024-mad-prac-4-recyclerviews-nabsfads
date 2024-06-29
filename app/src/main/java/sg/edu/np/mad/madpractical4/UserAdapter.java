@@ -13,8 +13,8 @@ import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    private List<User> userList;
-    private ListActivity listActivity;
+    private final List<User> userList;
+    private final ListActivity listActivity;
 
     public UserAdapter(List<User> userList, ListActivity listActivity) {
         this.userList = userList;
@@ -31,11 +31,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
-        holder.name.setText(user.name);
-        holder.description.setText(user.description);
+        holder.name.setText(user.getName());
+        holder.description.setText(user.getDescription());
 
         // Check if the last digit of the name is 7
-        boolean hasSeven = user.name.endsWith("7");
+        boolean hasSeven = user.getName().endsWith("7");
 
         // Show or hide the large image based on the condition
         holder.largeImage.setVisibility(hasSeven ? View.VISIBLE : View.GONE);
