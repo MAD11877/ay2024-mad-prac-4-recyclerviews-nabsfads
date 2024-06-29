@@ -1,49 +1,47 @@
 package sg.edu.np.mad.madpractical4;
 
+
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private boolean isFollowed;
+
+    private User currentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+
+        TextView titleTextView = findViewById(R.id.titleTextView);
+        TextView descriptionTextView = findViewById(R.id.descriptionTextView);
+        Button followButton = findViewById(R.id.followButton);
+
 
         String name = getIntent().getStringExtra("name");
         String description = getIntent().getStringExtra("description");
-        isFollowed = getIntent().getBooleanExtra("followed", false);
+        boolean followed = getIntent().getBooleanExtra("followed", false);
 
-        TextView tvName = findViewById(R.id.tvName);
-        TextView tvDescription = findViewById(R.id.tvDescription);
-        Button btnFollow = findViewById(R.id.btnFollow);
 
-        tvName.setText(name);
-        tvDescription.setText(description);
+        currentUser = new User(name, description, 0, followed);
 
-        btnFollow.setText(isFollowed ? "Unfollow" : "Follow");
 
-        btnFollow.setOnClickListener(v -> {
-            isFollowed = !isFollowed;
-            btnFollow.setText(isFollowed ? "Unfollow" : "Follow");
-            Toast.makeText(MainActivity.this, isFollowed ? "Followed" : "Unfollowed", Toast.LENGTH_SHORT).show(); // Show toast message
-        });
+        titleTextView.setText(currentUser.getName());
+        descriptionTextView.setText(currentUser.getDescription());
+        followButton.setText(currentUser.getFollowed() ? "UNFOLLOW" : "FOLLOW");
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        followButton.setOnClickListener(v -> {
+            currentUser.setFollowed(!currentUser.getFollowed());
+            followButton.setText(currentUser.getFollowed() ? "UNFOLLOW" : "FOLLOW");
+            Toast.makeText(this, currentUser.getFollowed() ? "Followed" : "Unfollowed", Toast.LENGTH_SHORT).show();
         });
     }
 }

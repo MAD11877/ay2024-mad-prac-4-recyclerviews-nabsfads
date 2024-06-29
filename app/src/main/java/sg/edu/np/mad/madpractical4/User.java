@@ -1,25 +1,58 @@
+
 package sg.edu.np.mad.madpractical4;
 
-public class User {
-    private final String name;
-    private final String description;
-    private final boolean followed;
 
-    public User(String name, String description, boolean followed) {
+public class User {
+    private String name;
+    private String description;
+    private int id;
+    private boolean followed;
+
+
+    public User(String name, String description, int id, boolean followed) {
         this.name = name;
         this.description = description;
+        this.id = id;
         this.followed = followed;
     }
+
 
     public String getName() {
         return name;
     }
 
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
     public String getDescription() {
         return description;
     }
 
-    public boolean isFollowed() {
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
+    public boolean getFollowed() {
         return followed;
+    }
+
+
+    public void setFollowed(boolean followed) {
+        this.followed = followed;
     }
 }

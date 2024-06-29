@@ -1,62 +1,82 @@
+
 package sg.edu.np.mad.madpractical4;
 
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.ImageView;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import java.util.List;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    private final List<User> userList;
-    private final ListActivity listActivity;
+public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
+    private List<User> userList;
+    private Context context;
 
-    public UserAdapter(List<User> userList, ListActivity listActivity) {
+
+    public UserAdapter(List<User> userList, Context context) {
         this.userList = userList;
-        this.listActivity = listActivity;
+        this.context = context;
     }
+
 
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_activity_list, parent, false);
-        return new UserViewHolder(view);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_activity_list, parent, false);
+        return new UserViewHolder(itemView);
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
-        holder.name.setText(user.getName());
-        holder.description.setText(user.getDescription());
+        holder.nameTextView.setText(user.getName());
+        holder.descriptionTextView.setText(user.getDescription());
+        holder.smallImageView.setImageResource(R.mipmap.ic_launcher);
+        holder.largeImageView.setImageResource(R.mipmap.ic_launcher);
 
-        // Check if the last digit of the name is 7
-        boolean hasSeven = user.getName().endsWith("7");
 
-        // Show or hide the large image based on the condition
-        holder.largeImage.setVisibility(hasSeven ? View.VISIBLE : View.GONE);
+        if (user.getName().endsWith("7")) {
+            holder.largeImageView.setVisibility(View.VISIBLE);
 
-        holder.itemView.setOnClickListener(v -> listActivity.onUserClicked(user));
+
+            ViewGroup.LayoutParams layoutParams = holder.largeImageView.getLayoutParams();
+            layoutParams.height = layoutParams.width;
+            holder.largeImageView.setLayoutParams(layoutParams);
+        } else {
+            holder.largeImageView.setVisibility(View.GONE);
+        }
+
+
+        holder.itemView.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Profile");
+            builder.setMessage(user.getName());
+            builder.setPositiveButton("Close", null);
+            builder.setNegativeButton("View", (dialog, which) -> {
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.putExtra("name", user.getName());
+                intent.putExtra("description", user.getDescription());
+                intent.putExtra("followed", user.getFollowed());
+                context.startActivity(intent);
+            });
+            builder.create().show();
+        });
     }
+
 
     @Override
     public int getItemCount() {
         return userList.size();
-    }
-
-    public static class UserViewHolder extends RecyclerView.ViewHolder {
-        TextView name, description;
-        ImageView largeImage;
-
-        public UserViewHolder(@NonNull View itemView) {
-            super(itemView);
-            name = itemView.findViewById(R.id.name);
-            description = itemView.findViewById(R.id.description);
-            largeImage = itemView.findViewById(R.id.large_image);
-        }
     }
 }
