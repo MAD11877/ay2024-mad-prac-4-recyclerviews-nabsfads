@@ -32,7 +32,7 @@ public class ListActivity extends AppCompatActivity {
         for (int i = 0; i < 20; i++) {
             String randomNameNumber = String.format(Locale.getDefault(), "%09d", new Random().nextInt(1000000000));
             String randomDescriptionNumber = String.format(Locale.getDefault(), "%09d", new Random().nextInt(1000000000));
-            userList.add(new User("Name " + randomNameNumber, "Description " + randomDescriptionNumber, i, new Random().nextBoolean()));
+            userList.add(new User("Name " + randomNameNumber, "Description " + randomDescriptionNumber, new Random().nextBoolean()));
         }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -61,7 +61,6 @@ public class ListActivity extends AppCompatActivity {
         });
 
         alert.setNegativeButton("Cancel", (dialog, which) -> {
-            // Do nothing on cancel
         });
 
         alert.show();
